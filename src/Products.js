@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native'
 import axios from 'axios'
 
 
@@ -7,7 +7,8 @@ import axios from 'axios'
 class Products extends Component {
     state = {
         data_products: [],
-        refreshing: false
+        refreshing: false,
+        showSpinner: false
     }
 
     componentDidMount(){
@@ -56,13 +57,18 @@ class Products extends Component {
     refreshData = () => {
         console.log('this is refreshing data')
         this.getDataProducts()
-        // return null
+    }
+
+    getMoreData = () => {
+        console.log('get more data!')
+        this.setState({ showSpinner: true })
     }
 
 
     render(){
         return (
             <View>
+
                 {
                     this.state.data_products.length > 0 && 
                     <FlatList
@@ -71,8 +77,19 @@ class Products extends Component {
                         renderItem={(item) => this.renderData(item)}
                         onRefresh={() => this.refreshData()}
                         refreshing={this.state.refreshing}
+                        onEndReached={() => this.getMoreData()}
+                        onEndReachedThreshold={5}
                     />
+
+                    
                 }
+
+                {
+                    this.state.showSpinner &&
+                    <ActivityIndicator size='small' />
+                }
+
+
 
             </View>
         )
