@@ -3,16 +3,13 @@ import {
   StyleSheet,
   Text,
   View,
+  AsyncStorage,
   TextInput,
   TouchableOpacity,
   Alert
 } from 'react-native'
 import axios from 'axios'
 import { BASE_API_URL } from '../global/util'
-
-
-// 1. kasih feedback ke user login success atau failed
-// 2. klo success, user di -redirect ke page main
 
 
 export default class Login extends Component {
@@ -22,10 +19,20 @@ export default class Login extends Component {
     errorMessage: ''
   }
 
+  componentDidMount(){
+    this.getToken()
+  }
+
+  async getToken(){
+    const dataToken = await AsyncStorage.getItem('token')
+    if (dataToken){
+      this.props.navigation.navigate('mainPage')
+    }
+  }
+
 
   loginHandler(){
     const { email, password } = this.state  // Destructuring ES6
-    console.log(email, password)
 
     if (email === '' || password === ''){
       Alert.alert('Warning', 'Email or Password can not be empty!')
@@ -37,17 +44,16 @@ export default class Login extends Component {
       }
       axios.post(url, bodyParams)
         .then(res => {
-          console.log(res)
 
           if (res.status !== 200){
             this.setState({ errorMessage: 'Your login account is not correct' })
           } else if (res.status === 200) {
-
+            AsyncStorage.setItem('token', res.data.id)
+            this.props.navigation.navigate('mainPage')
           }
 
         })
         .catch(err => {
-          console.log(err)
           this.setState({ errorMessage: 'Error login' })
         })
     }
