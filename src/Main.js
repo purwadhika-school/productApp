@@ -18,9 +18,10 @@ class Main extends Component {
     // }
     
     render(){
+        console.log(this.props)
         return (
             <View>
-                <Products />
+                <Products navigation={this.props.navigation} />
             </View>
         )
     }

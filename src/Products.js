@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
 import axios from 'axios'
 
 
@@ -32,24 +32,26 @@ class Products extends Component {
     renderData = ({item}) => {
         console.log(item)
         return (
-            <View style={{ 
-                flexDirection: 'row',
-                backgroundColor: 'white', 
-                borderRadius: 5,
-                margin: 10 }}>
-                <Image 
-                    style={{ width: 100, 
-                        marginLeft: 10,
-                        height: 100, 
-                        resizeMode: 'contain' }}
-                    source={{ uri: item.image }} />
-                <View style={{ marginTop: 15, marginLeft: 10 }}>
-                    <Text style={{ 
-                        fontSize: 20, 
-                        fontWeight: '500' }}>{item.product_name}</Text>
-                    <Text>Rp {item.price}</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('productDetails', { id: item.product_id })}>
+                <View style={{ 
+                    flexDirection: 'row',
+                    backgroundColor: 'white', 
+                    borderRadius: 5,
+                    margin: 10 }}>
+                    <Image 
+                        style={{ width: 100, 
+                            marginLeft: 10,
+                            height: 100, 
+                            resizeMode: 'contain' }}
+                        source={{ uri: item.image }} />
+                    <View style={{ marginTop: 15, marginLeft: 10 }}>
+                        <Text style={{ 
+                            fontSize: 20, 
+                            fontWeight: '500' }}>{item.product_name}</Text>
+                        <Text>Rp {item.price}</Text>
+                    </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 
